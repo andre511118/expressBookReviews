@@ -38,7 +38,15 @@ public_users.get('/isbn/:isbn',function (req, res) {
     const isbn = req.params.isbn;
     res.send(books[isbn])
  });
-  
+
+ public_users.get('/async-get-books-with-isbn',function (req, res) {
+    const isbn = req.params.isbn;
+    const get_books = new Promise((resolve, reject) => {
+        resolve(res.send(books[isbn]));
+      });
+      get_books.then(() => console.log("Promise for Task 11 resolved"));
+  });
+
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
     const author = req.params.author;
@@ -55,6 +63,23 @@ public_users.get('/author/:author',function (req, res) {
   res.send(matchingBooks);
 });
 
+public_users.get('/async-get-books-with-author',function (req, res) {
+    const author = req.params.author;
+    const matchingBooks = [];
+
+    // Iterate through the books array and check if the title matches
+    for (const isbn in books) {
+        const book = books[isbn];
+        if (book.author.toLowerCase().includes(author.toLowerCase())) {
+            matchingBooks.push(book);
+        }
+    }
+    const get_books = new Promise((resolve, reject) => {
+        resolve(res.send(matchingBooks));
+      });
+      get_books.then(() => console.log("Promise for Task 12 resolved"));
+  });
+
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
     const title = req.params.title;
@@ -69,6 +94,23 @@ public_users.get('/title/:title',function (req, res) {
   }
 
   res.send(matchingBooks);
+});
+
+public_users.get('/async-get-books-with-title',function (req, res) {
+    const title = req.params.title;
+    const matchingBooks = [];
+
+    // Iterate through the books array and check if the title matches
+    for (const isbn in books) {
+        const book = books[isbn];
+        if (book.title.toLowerCase().includes(title.toLowerCase())) {
+        matchingBooks.push(book);
+    }
+    }
+    const get_books = new Promise((resolve, reject) => {
+        resolve(res.send(matchingBooks));
+    });
+    get_books.then(() => console.log("Promise for Task 13 resolved"));
 });
 
 //  Get book review
